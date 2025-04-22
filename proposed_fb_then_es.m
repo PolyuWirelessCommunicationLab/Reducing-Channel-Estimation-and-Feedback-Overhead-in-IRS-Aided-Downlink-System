@@ -1,4 +1,4 @@
-function NMSE_all=proposed_fb_then_es(M,N,K,noise_pow,P1,P2,G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,bit_ele,pilot_length,tau1,mu,pilot_irs_mode,bit_allo_mode)
+function NMSE_all=proposed_fb_then_es(M,N,K,noise_pow,P1,P2,G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,bit_ele,pilot_length,tau1,mu,bit_allo_mode)
 %%
 % proposed quantize-then-estimate scheme
 % NMSE_all(1): NMSE of all quantized received signals
@@ -17,7 +17,7 @@ rng(1,"twister");
 x2=1/sqrt(2)*(randn(tau2,M)+1j*randn(tau2,M)); % pilot signals in Step 2
 num_test=size(coeff_out,2);
 
-[Y_set_Tr,Cov_Y,Y_set_Test,Alpha_set,Y2_pure_set]=Gen_Train_Set(G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,M,N,K,tau1,tau2,tau_tol,P1,P2,noise_pow,Phi1,x1,x2,pilot_irs_mode);
+[Y_set_Tr,Cov_Y,Y_set_Test,Alpha_set,Y2_pure_set]=Gen_Train_Set(G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,M,N,K,tau1,tau2,tau_tol,P1,P2,noise_pow,Phi1,x1,x2);
 
 Bits_tol=bit_ele.*tau_tol;
 bit_allo=zeros(tau_tol,K);
