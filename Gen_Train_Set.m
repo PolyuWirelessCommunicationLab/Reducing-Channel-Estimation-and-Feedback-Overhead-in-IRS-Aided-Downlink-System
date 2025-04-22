@@ -27,7 +27,7 @@ for ii=1:num_train
     for k=1:K
        Cov_Alpha((k-1)*N+1:k*N,:)=Cov_Alpha((k-1)*N+1:k*N,:)+Alpha_set_Tr((k-1)*N+1:k*N,ii)*(Alpha_set_Tr((k-1)*N+1:k*N,ii))';
     end    
-    THETA=Gen_THETA(K,M,N,tau2,P2,LAMDA,mode,x2);
+    THETA=Gen_THETA(K,M,N,tau2,P2,LAMDA,x2);
     OMEGA=[THETA;kron(eye(N),sqrt(P1)*x1.')]; 
     Y2_pure_set(:,ii)=OMEGA(1:tau2*K,:)*G1(:);
 end
