@@ -15,12 +15,12 @@ num_test=size(coeff_out,2);
 
 [Y_set_Tr,Cov_Y,Y_set_Test,Alpha_set,Y2_pure_set]=Gen_Train_Set(G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,M,N,K,tau1,tau2,tau_tol,P1,P2,noise_pow,Phi1,x1,x2,pilot_irs_mode);
 
-%overhead
+%total overhead
 Bits_tol=bit_ele.*tau_tol;
 T_tol=pilot_length+max(Bits_tol/mu);
 
 bit_allo=zeros(tau_tol,K);
-%bit allocation
+%bit allocation strategy 1: optimized 2: equal 3: random
 switch bit_allo_mode
     case 1
         bit_allo=bit_allo_allrev(tau_tol, N, K, Cov_Y, Bits_tol);
