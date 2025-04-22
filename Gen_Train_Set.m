@@ -1,4 +1,4 @@
-function [Y_set_Tr,Cov_Y,Y_set_Test,Alpha_set_test,Y2_pure_set]=Gen_Train_Set(G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,M,N,K,tau1,tau2,tau_tol,P1,P2,noise_pow,Phi1,x1,x2,mode)
+function [Y_set_Tr,Cov_Y,Y_set_Test,Alpha_set_test,Y2_pure_set]=Gen_Train_Set(G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,M,N,K,tau1,tau2,tau_tol,P1,P2,noise_pow,Phi1,x1,x2)
 %%
 % Generate date set of training and testing for Lloyd algorithm 
 % Y_set_Tr: training set of received signals
