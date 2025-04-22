@@ -15,7 +15,6 @@ fb_time=90*ones(1,num_case); % total feedback overhead in time instants
 tau1=N*ones(1,num_case); % pilot transmitting overhead in Step 1
 
 mu=4; % QAM modulation rate in bits/sample
-pilot_irs_mode=1; % IRS configuration selection
 bit_allo_mode=1; %bit allocation selection for 1:optimal 2:equal 3:random
 
 bit_ele_ben=fb_time.*mu./(M.*N); % quantization bits for each elements under the benchmark scheme 1
@@ -33,14 +32,14 @@ for id=1:num_case
     [G1_all_Tr, coeff_out_Tr]=channel_parameters_downlink(M,N,K,corr,num_train);
     [G1_all, coeff_out]=channel_parameters_downlink(M,N,K,corr,num_test);
 
-    NMSE_all(:,id)=proposed_fb_then_es(M,N,K,noise_pow,P1,P2,G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,bit_ele_pro(:,id),pilot_time(id),tau1(id),mu,pilot_irs_mode,bit_allo_mode);
+    NMSE_all(:,id)=proposed_fb_then_es(M,N,K,noise_pow,P1,P2,G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,bit_ele_pro(:,id),pilot_time(id),tau1(id),mu,bit_allo_mode);
     NMSE_Gk(1,id)=NMSE_all(6,id);
     fprintf('id = %d, NMSE_Gk of proposed with optimal bit allo = %.4f \n',id, NMSE_Gk(1,id));
 
-    % NMSE_Gk(2,id)=proposed_fb_then_es(M,N,K,noise_pow,P1(id),P2(id),G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,bit_ele_pro(id),pilot_time(id),tau1,mu,pilot_irs_mode,2);
+    % NMSE_Gk(2,id)=proposed_fb_then_es(M,N,K,noise_pow,P1(id),P2(id),G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,bit_ele_pro(id),pilot_time(id),tau1,mu,2);
     % fprintf('id = %d, NMSE_Gk of proposed with equal bit allo = %.4f \n',id, NMSE_Gk(2,id));
     % 
-    % NMSE_Gk(3,id)=proposed_fb_then_es(M,N,K,noise_pow,P1(id),P2(id),G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,bit_ele_pro(id),pilot_time(id),tau1,mu,pilot_irs_mode,3);
+    % NMSE_Gk(3,id)=proposed_fb_then_es(M,N,K,noise_pow,P1(id),P2(id),G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,bit_ele_pro(id),pilot_time(id),tau1,mu,3);
     % fprintf('id = %d, NMSE_Gk of proposed with random bit allo = %.4f \n',id, NMSE_Gk(3,id));
 
     NMSE_Gk(2,id)=benchmark_es_then_fb(M,N(id),K,noise_pow,BS_pow,G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,bit_ele_ben(id),pilot_time(id),mu);
