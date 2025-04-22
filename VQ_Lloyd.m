@@ -1,4 +1,5 @@
 function [codebook, Distortion_all] = VQ_Lloyd(training_set, bit)
+% Lloyd algorithm to generate the quantization codebook
 vec_len=size(training_set,1);
 vec_num=size(training_set,2);
 size_cb=2^bit;
