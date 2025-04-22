@@ -1,4 +1,6 @@
-clear
+clc
+clear all
+
 M=8; % number of BS antennas
 N=16; % number of IRS elements
 K=4; % number of users
