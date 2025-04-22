@@ -18,3 +18,5 @@ Channel state information (CSI) acquisition is essential for the base station (B
 }
 # Note
 The code is provided for the benefit of better understanding the results, and is not meant to be used in production.
+# How to Use
+Run the main.m file. Adjust corresponding parameters in the file to produce different figures.
