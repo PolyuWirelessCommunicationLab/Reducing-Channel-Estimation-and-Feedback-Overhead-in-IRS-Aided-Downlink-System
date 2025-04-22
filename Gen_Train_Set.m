@@ -1,5 +1,12 @@
 function [Y_set_Tr,Cov_Y,Y_set_Test,Alpha_set_test,Y2_pure_set]=Gen_Train_Set(G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,M,N,K,tau1,tau2,tau_tol,P1,P2,noise_pow,Phi1,x1,x2,mode)
-
+%%
+% Generate date set of training and testing for Lloyd algorithm 
+% Y_set_Tr: training set of received signals
+% Cov_Y: covariance matrix of received signals
+% Y_set_Test: test set of received signals
+% Alpha_set_test: test set of \alpha_{k,d}'s
+% Y2_pure_set: training set of received signals without noise in Step 2 
+%%
 num_train=size(coeff_out_Tr,2);
 num_test=size(coeff_out,2);
 % Training Set
@@ -39,11 +46,7 @@ for k=1:K
     Cov_Alphak=Cov_Alpha((k-1)*N+1:k*N,:);
     Y1k=Y1_set_Tr((k-1)*tau1+1:k*tau1,:);
     Alphak_es=Cov_Alphak*Phi1'/(Phi1*Cov_Alphak*Phi1'+sigma_z1^2*eye(tau1))*Y1k;
-    Alpha_es_set_Tr((k-1)*N+1:k*N,:)=Alphak_es;
-    
-    MSE=trace(Cov_Alphak-Cov_Alphak*Phi1'/(Phi1*Cov_Alphak*Phi1'+sigma_z1^2*eye(tau1))*Phi1*Cov_Alphak)
-    disp(norm(Alphak_es(:,1)-Alpha_set_Tr((k-1)*N+1:k*N,1))^2)
-    disp(norm(Alphak_es(:,1)-Alpha_set_Tr((k-1)*N+1:k*N,1))^2/norm(Alpha_set_Tr((k-1)*N+1:k*N,1))^2)
+    Alpha_es_set_Tr((k-1)*N+1:k*N,:)=Alphak_es;   
 end
 
 

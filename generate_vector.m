@@ -1,6 +1,6 @@
 function numbers = generate_vector(N, M)
-    if M < N || M > 12 * N
-        error('The sum M must be no less than N and no greater than 12 * N');
+    if M < N || M > 10 * N
+        error('The sum M must be no less than N and no greater than 10 * N');
     end
 
     % Initialize the sequence with ones.
@@ -13,7 +13,7 @@ function numbers = generate_vector(N, M)
         index = randi([1, N]);
 
         % Calculate the possible increment such that the number does not exceed 12.
-        increment = min(12 - numbers(index), remaining);
+        increment = min(10 - numbers(index), remaining);
 
         % Randomly select an increment from [1, possible increment] and update the number.
         if increment > 1

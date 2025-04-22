@@ -1,9 +1,12 @@
 function NMSE_Gk=benchmark_fb_sum(M,N,K,noise_pow,BS_pow,G1_all_Tr,coeff_out_Tr,G1_all,coeff_out,fb_time,pilot_length,mu)
-
-tau=pilot_length; %time slots
+%%
+% Benchmark Scheme 2
+%%
+tau=pilot_length; %total time instants
 P1=10^(BS_pow/10)*1e-3;  %transmit power 
-Phi1=dftmtx(N);
-Phi2=dftmtx(max(N,pilot_length-N));
+Phi1=dftmtx(N)/sqrt(N);
+Phi2=dftmtx(max(N,pilot_length-N))/sqrt(max(N,pilot_length-N));
+rng(1,"twister");
 x1=zeros(tau,M);
 x1(1:N,:)=ones(N,M);
 x1(N+1:end,:)=1/sqrt(2)*(randn(pilot_length-N,M)+1j*randn(pilot_length-N,M));
@@ -65,8 +68,6 @@ for ii=1:num_test
         Alpha_ki((k-1)*N+1:k*N)=(sqrt(P1)*ones(1,M)*Gk_k).';        
         Y_pure((k-1)*tau+1:k*tau,ii)=A1*Gk_k(:);
         Gk_set(M*N*(k-1)+1:M*N*k,ii)=Gk_k(:);
-        % gk_k_d=sum(Gk_k,1);
-        % gk_set((k-1)*N+1:k*N,ii)=gk_k_d.';
     end
     Alpha_set(:,ii)=Alpha_ki;
 end
@@ -97,12 +98,6 @@ for k=1:K
     Y1k_1=Y_set((k-1)*tau+1:(k-1)*tau+N,:);
     Alphak_es=Cov_Alphak*Phi1'/(Phi1*Cov_Alphak*Phi1'+sigma_z^2*eye(N))*Y1k_1;
     Alpha_es_set((k-1)*N+1:k*N,:)=Alphak_es;
-   
-    % for d=1:N
-    %     Gk_es_d=Gk_es_k((d-1)*M+1:d*M,:);
-    %     gk_es_d=sum(Gk_es_d,1);
-    %     gk_es_set((k-1)*N+d,:)=gk_es_d;
-    % end
 end
 MSE_Gk_es=sum(abs(Gk_es_set-Gk_set).^2,1);
 pow_Gk=sum(abs(Gk_set).^2,1);
@@ -132,31 +127,6 @@ for k=1:K
     end
     Alpha_quan_set((k-1)*N+1:k*N,:)=Alpha_quan;  
 end
-
-
-
-% for k=1:K
-%     Gk_k_Train=Gk_es_set_Tr((k-1)*M*N+1:k*M*N,:); 
-%     Gk_es_k=Gk_es_set((k-1)*M*N+1:k*M*N,:);
-%     gk_quan=zeros(N,num_test);
-%     Gk_Train=zeros(N,M,num_train);
-%     Gk_es=zeros(N,M,num_test);
-%     for d=1:N
-%         Gk_Train(d,:,:)=Gk_k_Train((d-1)*M+1:d*M,:);
-%         Gk_es(d,:,:)=Gk_es_k((d-1)*M+1:d*M,:);
-%     end
-%     parfor d=1:N
-%         Gk_d_Train=squeeze(Gk_Train(d,:,:)); %M*num_train
-%         Gk_es_d=squeeze(Gk_es(d,:,:));
-%         gk_d_Train=sum(Gk_d_Train,1); %sum of g_{k,d}, 1*num_train           
-%         gk_es_d=sum(Gk_es_d,1); %sum of g_es_{k,d}, 1*num_test
-% 
-%         [codebook_gkd,~]=VQ_Lloyd(gk_d_Train,bits_sum(d));
-%         gk_quan_d=Quantizer(gk_es_d,codebook_gkd);      
-%         gk_quan(d,:)=gk_quan_d;
-%     end
-%     gk_quan_set((k-1)*N+1:k*N,:)=gk_quan;  
-% end
 MSE_Alpha=sum(abs(Alpha_quan_set-Alpha_set).^2,1);
 pow_Alpha=sum(abs(Alpha_set).^2,1);
 NMSE_Alpha_quan=mean(MSE_Alpha)./mean(pow_Alpha);
@@ -200,12 +170,6 @@ for k=1:K
     end
     
     for d=1:N
-        % Gk_k_d_Tr=Gk_k_Train((d-1)*M+1:d*M,:);
-        % Gk_es_k_d=Gk_es_k((d-1)*M+1:d*M,:);
-        % parfor m=1:M
-        %     [codebook_Gk,~]=VQ_Lloyd(Gk_k_d_Tr(m,:),bit_allo(m));
-        %     Gk_k_d_quan(m,:)=Quantizer(Gk_es_k_d(m,:),codebook_Gk); 
-        % end
         for ii=1:num_test
             if k==ref_idx(d,ii)
                 Gref_quan((d-1)*M+1:d*M,ii)=Gk_k_quan((d-1)*M+1:d*M,ii);
@@ -240,10 +204,8 @@ parfor ii=1:num_test
 end
 %recover of all gk's
 Gk_quan_set=zeros(K*M*N,num_test);
-% Gk_new_set=zeros(K*M*N,num_test);
 for k=1:K        
     Gk_quan_set(M*N*(k-1)+1:M*N*k,:)=Gref_quan.*repelem(coeff_quan_set((k-1)*N+1:k*N,:),M,1);
-    % Gk_new_set(M*N*(k-1)+1:M*N*k,:)=Gref_set.*repelem(coeff_new_set((k-1)*N+1:k*N,:),M,1);        
 end
 MSE_coeff=sum(abs(coeff_quan_set-coeff_new_set).^2,1);
 pow_coeff=sum(abs(coeff_new_set).^2,1);

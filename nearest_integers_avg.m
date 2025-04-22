@@ -1,8 +1,8 @@
 function vec = nearest_integers_avg(B, L)
 
-    if B < 1 || L < 1 || floor(L) ~= L
-        error('B must be a real number greater than 1 and L must be an integer greater than 1.');
-    end
+    % if B < 1 || L < 1 || floor(L) ~= L
+    %     error('B must be a real number greater than 1 and L must be an integer greater than 1.');
+    % end
     
     tolerance = 0.01;
     max_iter = 100;
